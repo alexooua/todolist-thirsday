@@ -114,18 +114,17 @@ export const setTasksAC = (tasks, todolistId) => ({type: SET_TASKS, tasks, todol
 export const addTodolistAC = (newTodolist) => ({type: ADD_TODOLIST, newTodolist: newTodolist});
 export const setTodolistsAC = (todolists) => ({type: SET_TODOLISTS, todolists: todolists});
 
-
-export const getTodoListsTC=()=>(dispatch,getState)=>{
-
+//Thunk
+export const getTodoListsTC = () => (dispatch) => {
+//get axios request
     api.getTodolists()
-
-        .then(res=>{
-            dispatch(setTodolistsAC(res.data))
-
-        })
+        .then(res => {
+            //dispatch action
+                 dispatch(setTodolistsAC(res.data))
+            })
 }
-export const getTasksThunkC=(todoListId)=>(dispatch,getState)=>{
-    api.getTasks(todoListId )
+export const getTasksThunkC = (todoListId) => (dispatch, getState) => {
+    api.getTasks(todoListId)
         .then(res => {
             let allTasks = res.data.items;
             dispatch(setTasksAC(allTasks, todoListId ));
