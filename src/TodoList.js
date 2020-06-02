@@ -5,45 +5,21 @@ import TodoListFooter from "./TodoListFooter";
 import TodoListTitle from "./TodoListTitle";
 import AddNewItemForm from "./AddNewItemForm";
 import {connect} from "react-redux";
-import {
-    addTaskAC, createTaskTC,
-    deleteTaskAC,
-    deleteTodolistAC,
-    getTasksThunkC,
-    setTasksAC,
-    updateTaskAC,
-    updateTodolistTitleAC
-} from "./reducer";
-import {api} from "./api";
+import {updateTitleTC,addTaskTC, changeTaskTC, deleteTaskTC, deleteTodolistTC, getTasksTC} from "./reducer";
 
 class TodoList extends React.Component {
-
     state = {
         filterValue: "All"
     };
-
     componentDidMount() {
         this.restoreState();
     }
-
     restoreState = () => {
-        this.props.getTasks(this.props.id)
-
-        // api.getTasks(this.props.id)
-        //     .then(res => {
-        //         let allTasks = res.data.items;
-        //         this.props.setTasks(allTasks, this.props.id);
-        //     });
+        this.props.getTasksTC(this.props.id)
     };
-
     addTask = (newText) => {
-        this.props.createTask(newText,this.props.id)
-        // api.createTask(newText, this.props.id).then(res => {
-        //     let newTask = res.data.data.item;
-        //     this.props.addTask(newTask, this.props.id);
-        // });
+        this.props.addTaskTC(newText, this.props.id)
     };
-
     changeFilter = (newFilterValue) => {
         this.setState({
             filterValue: newFilterValue
@@ -55,11 +31,8 @@ class TodoList extends React.Component {
             return task.id === taskId
         });
         let task = {...changedTask, ...obj};
+        this.props.changeTaskTC(task, obj)
 
-        api.updateTask(taskId, this.props.id, task)
-            .then(res => {
-                this.props.updateTask(taskId, obj, this.props.id)
-            })
     };
 
     changeStatus = (taskId, status) => {
@@ -71,24 +44,17 @@ class TodoList extends React.Component {
     };
 
     deleteTodolist = () => {
-        api.deleteTodolist(this.props.id)
-            .then(res => {
-                this.props.deleteTodolist(this.props.id);
-            });
+        this.props.deleteTodolistTC(this.props.id)
+
     };
 
     deleteTask = (taskId) => {
-        api.deleteTask(taskId, this.props.id)
-            .then(res => {
-                this.props.deleteTask(taskId, this.props.id);
-            });
+        this.props.deleteTaskTC(taskId, this.props.id)
+
     };
 
     updateTitle = (title) => {
-        api.updateTodolistTitle(title, this.props.id)
-            .then(res => {
-                this.props.updateTodolistTitle(title, this.props.id);
-            });
+        this.props.updateTitleTC(this.props.id, title)
     };
 
     render = () => {
@@ -123,44 +89,14 @@ class TodoList extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        // addTask(newTask, todolistId) {
-        //     dispatch(addTaskAC(newTask, todolistId));
-        // },
-        createTask: (newText,todoListId) => {
-            const thunkAction = createTaskTC(newText,todoListId)
-            dispatch(thunkAction)
 
-        },
-        // setTasks(tasks, todolistId) {
-        //     dispatch(setTasksAC(tasks, todolistId));
-        // },
-        getTasks: (todoListId) => {
-            const thunkAction = getTasksThunkC(todoListId)
-            dispatch(thunkAction)
-
-        },
-
-        updateTask(taskId, obj, todolistId) {
-            const action = updateTaskAC(taskId, obj, todolistId);
-            dispatch(action);
-        },
-        deleteTodolist: (todolistId) => {
-            const action = deleteTodolistAC(todolistId);
-            dispatch(action)
-        },
-        deleteTask: (taskId, todolistId) => {
-            const action = deleteTaskAC(todolistId, taskId);
-            dispatch(action)
-        },
-        updateTodolistTitle: (title, todolistId) => {
-            const action = updateTodolistTitleAC(todolistId, title);
-            dispatch(action)
-        }
-    }
-};
-
-const ConnectedTodolist = connect(null, mapDispatchToProps)(TodoList);
+const ConnectedTodolist = connect(null, {
+    updateTitleTC,
+    deleteTaskTC,
+    deleteTodolistTC,
+    getTasksTC,
+    changeTaskTC,
+    addTaskTC
+})(TodoList);
 export default ConnectedTodolist;
 

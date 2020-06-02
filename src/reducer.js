@@ -120,19 +120,58 @@ export const getTodoListsTC = () => (dispatch) => {
     api.getTodolists()
         .then(res => {
             //dispatch action
-                 dispatch(setTodolistsAC(res.data))
-            })
+            dispatch(setTodolistsAC(res.data))
+        })
 }
-export const getTasksThunkC = (todoListId) => (dispatch, getState) => {
+export const addTodoListTC = (title) => (dispatch) => {
+//get axios request
+    api.createTodolist(title)
+        .then(res => {
+            let todolist = res.data.data.item
+            dispatch(addTodolistAC(todolist))
+        })
+}
+export const deleteTodolistTC = (id) => (dispatch) => {
+//get axios request
+    api.deleteTodolist(id)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(deleteTodolistAC(id))
+            }
+        })
+}
+
+export const getTasksTC = (todoListId) => (dispatch, getState) => {
     api.getTasks(todoListId)
         .then(res => {
             let allTasks = res.data.items;
-            dispatch(setTasksAC(allTasks, todoListId ));
+            dispatch(setTasksAC(allTasks, todoListId));
         });
 }
-export const createTaskTC=(newText,todoListId)=>(dispatch,getState)=>{
+export const addTaskTC = (newText, todoListId) => (dispatch, getState) => {
     api.createTask(newText, todoListId).then(res => {
         let newTask = res.data.data.item;
         dispatch(addTaskAC(newTask, todoListId));
     });
+}
+
+export const changeTaskTC = (task, obj) => (dispatch, getState) => {
+    api.updateTask(task)
+        .then(res => {
+            res.data.resultCode === 0 && dispatch(updateTaskAC(task.id, obj, task.todoListId))
+        })
+}
+export const deleteTaskTC = (taskId, id) => (dispatch) => {
+    api.deleteTask(taskId, id)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(deleteTaskAC(id, taskId))
+            }
+        });
+}
+export const updateTitleTC = (id, title) => (dispatch, getState) => {
+    api.updateTodolistTitle(title, id)
+        .then(res => {
+            res.data.resultCode === 0 && dispatch(updateTodolistTitleAC(id, titlek))
+        });
 }
