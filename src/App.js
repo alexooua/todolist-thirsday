@@ -26,24 +26,27 @@ class App extends React.Component {
                              tasks={tl.tasks}/>
         });
 
-        return (
-            <>
-                <div>
-                    <AddNewItemForm addItem={this.addTodoList}/>
-                </div>
-                <div className="App">
-                    {todolists}
-                </div>
-            </>
-        );
+
+        // {this.props.isLoad ? <div><AddNewItemForm addItem={this.addTodoList}/></div>
+        //     <div className="App">{todolists}</div>:SPINNER}
+
+        return (<div>
+            {this.props.isLoad?<div className="lds-ripple">
+                <div>{console.log(this.props.isLoad)}</div>
+                <div></div>
+            </div>:<div><AddNewItemForm addItem={this.addTodoList}/><div className="App">{todolists}
+            </div></div>}
+        </div>);
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        todolists: state.todolists
+        todolists: state.todolists,
+        isLoad: false
     }
 };
+
 
 const ConnectedApp = connect(mapStateToProps, {addTodoListTC,getTodoListsTC})(App);
 export default ConnectedApp;

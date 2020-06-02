@@ -8,6 +8,7 @@ export const ADD_TASK = "TodoList/Reducer/ADD-TASK";
 export const SET_TASKS = "TodoList/Reducer/SET_TASKS";
 export const UPDATE_TASK = "TodoList/Reducer/UPDATE-TASK";
 export const SET_TODOLISTS = "TodoList/Reducer/SET_TODOLISTS";
+export const SET_SPINNER = "TodoList/Reducer/SET_SPINNER";
 
 const initialState = {
     todolists: [],
@@ -27,6 +28,11 @@ const reducer = (state = initialState, action) => {
                         return {...tl, tasks: action.tasks}
                     }
                 })
+            };
+        case SET_SPINNER:
+            return {
+                ...state,
+                isLoad: action.isLoad
             };
         case SET_TODOLISTS:
             return {
@@ -113,65 +119,85 @@ export const addTaskAC = (newTask, todolistId) => ({type: ADD_TASK, newTask, tod
 export const setTasksAC = (tasks, todolistId) => ({type: SET_TASKS, tasks, todolistId});
 export const addTodolistAC = (newTodolist) => ({type: ADD_TODOLIST, newTodolist: newTodolist});
 export const setTodolistsAC = (todolists) => ({type: SET_TODOLISTS, todolists: todolists});
+export const setIsLoadAC = (isLoad) => ({type: SET_SPINNER, isLoad: isLoad});
 
 //Thunk
 export const getTodoListsTC = () => (dispatch) => {
-//get axios request
+    dispatch(setIsLoadAC(true))
+    //get axios request
     api.getTodolists()
         .then(res => {
             //dispatch action
             dispatch(setTodolistsAC(res.data))
+            dispatch(setIsLoadAC(false))
         })
 }
 export const addTodoListTC = (title) => (dispatch) => {
 //get axios request
+    dispatch(setIsLoadAC(true))
     api.createTodolist(title)
         .then(res => {
             let todolist = res.data.data.item
             dispatch(addTodolistAC(todolist))
+            dispatch(setIsLoadAC(false))
         })
 }
 export const deleteTodolistTC = (id) => (dispatch) => {
 //get axios request
+    dispatch(setIsLoadAC(true))
     api.deleteTodolist(id)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(deleteTodolistAC(id))
             }
+            dispatch(setIsLoadAC(false))
         })
+
 }
 
 export const getTasksTC = (todoListId) => (dispatch, getState) => {
+    dispatch(setIsLoadAC(true))
     api.getTasks(todoListId)
-        .then(res => {
-            let allTasks = res.data.items;
-            dispatch(setTasksAC(allTasks, todoListId));
-        });
+        .then(
+            res => {
+
+                let allTasks = res.data.items;
+                dispatch(setTasksAC(allTasks, todoListId));
+                dispatch(setIsLoadAC(false))
+            });
 }
 export const addTaskTC = (newText, todoListId) => (dispatch, getState) => {
+    dispatch(setIsLoadAC(true))
     api.createTask(newText, todoListId).then(res => {
         let newTask = res.data.data.item;
         dispatch(addTaskAC(newTask, todoListId));
+        dispatch(setIsLoadAC(false))
     });
 }
 
 export const changeTaskTC = (task, obj) => (dispatch, getState) => {
+    dispatch(setIsLoadAC(true))
     api.updateTask(task)
         .then(res => {
             res.data.resultCode === 0 && dispatch(updateTaskAC(task.id, obj, task.todoListId))
+            dispatch(setIsLoadAC(false))
         })
 }
 export const deleteTaskTC = (taskId, id) => (dispatch) => {
+    dispatch(setIsLoadAC(true))
     api.deleteTask(taskId, id)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(deleteTaskAC(id, taskId))
+                dispatch(setIsLoadAC(false))
             }
         });
 }
-export const updateTitleTC = (id, title) => (dispatch, getState) => {
+export const updateTitleTC = (id, title) => (dispatch) => {
+    dispatch(setIsLoadAC(true))
     api.updateTodolistTitle(title, id)
         .then(res => {
-            res.data.resultCode === 0 && dispatch(updateTodolistTitleAC(id, titlek))
+            res.data.resultCode === 0 && dispatch(updateTodolistTitleAC(id, title))
+            dispatch(setIsLoadAC(false))
         });
 }
