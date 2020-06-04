@@ -1,4 +1,5 @@
 import {api} from "./api";
+import {TodoType} from "./types/entites";
 
 export const ADD_TODOLIST = "TodoList/Reducer/ADD-TODOLIST";
 export const DELETE_TODOLIST = "TodoList/Reducer/DELETE-TODOLIST";
@@ -10,13 +11,18 @@ export const UPDATE_TASK = "TodoList/Reducer/UPDATE-TASK";
 export const SET_TODOLISTS = "TodoList/Reducer/SET_TODOLISTS";
 export const SET_SPINNER = "TodoList/Reducer/SET_SPINNER";
 
-const initialState = {
+
+type  InitialStateType = {
+    todolists: Array<TodoType>
+    isLoad: boolean
+}
+const initialState: InitialStateType = {
     todolists: [],
-    isLoad:false
+    isLoad: false
 
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state:InitialStateType = initialState, actio:any):InitialStateType => {
     switch (action.type) {
         case SET_TASKS:
             return {
@@ -112,14 +118,14 @@ export default reducer;
 
 // Action creators
 export const updateTaskAC = (taskId, obj, todolistId) => ({type: UPDATE_TASK, taskId, obj, todolistId});
-export const deleteTodolistAC = (todolistId) => ({type: DELETE_TODOLIST, todolistId: todolistId});
+export const deleteTodolistAC = (todolistId:number) => ({type: DELETE_TODOLIST, todolistId: todolistId});
 export const deleteTaskAC = (todolistId, taskId) => ({type: DELETE_TASK, todolistId, taskId});
 export const updateTodolistTitleAC = (todolistId, title) => ({type: UPDATE_TODOLIST_TITLE, todolistId, title});
 export const addTaskAC = (newTask, todolistId) => ({type: ADD_TASK, newTask, todolistId});
-export const setTasksAC = (tasks, todolistId) => ({type: SET_TASKS, tasks, todolistId});
-export const addTodolistAC = (newTodolist) => ({type: ADD_TODOLIST, newTodolist: newTodolist});
-export const setTodolistsAC = (todolists) => ({type: SET_TODOLISTS, todolists: todolists});
-export const setIsLoadAC = (isLoad) => ({type: SET_SPINNER, isLoad: isLoad});
+export const setTasksAC = (tasks, todolistId:string) => ({type: SET_TASKS, tasks, todolistId});
+export const addTodolistAC = (newTodolist:TodoType) => ({type: ADD_TODOLIST, newTodolist: newTodolist});
+export const setTodolistsAC = (todolists:) => ({type: SET_TODOLISTS, todolists: todolists});
+export const setIsLoadAC = (isLoad:boolean) => ({type: SET_SPINNER, isLoad: isLoad});
 
 //Thunk
 export const getTodoListsTC = () => (dispatch) => {
