@@ -16,6 +16,7 @@ type MapDispatchPropsType = {
     addTodoListTC(title: string): void
 }
 
+
 class App extends React.Component<MapStatePropsType & MapDispatchPropsType> {
 
     componentDidMount() {

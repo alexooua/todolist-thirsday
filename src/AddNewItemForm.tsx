@@ -11,7 +11,7 @@ type OwnPropsType = {
 }
 
 
-class AddNewItemForm extends React.Component<OwnPropsType&StateType> {
+class AddNewItemForm extends React.Component<any> {
 
     state:StateType  = {
         error: false,

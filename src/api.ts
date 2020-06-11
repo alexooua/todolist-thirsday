@@ -23,22 +23,22 @@ export const api = {
 
         return instance.post<CreatResponseType>("", {title: title})
     },
-    deleteTodolist(todolistId) {
+    deleteTodolist(todolistId:string) {
         return instance.delete(`/${todolistId}` )
     },
-    updateTodolistTitle(title, todolistId) {
+    updateTodolistTitle(title:string, todolistId:string) {
         return instance.put(`/${todolistId}`, {title: title})
     },
-    getTasks(todolistId) {
+    getTasks(todolistId:string) {
         return instance.get(`/${todolistId}/tasks`)
     },
-    createTask(newTaskTitle, todolistId) {
+    createTask(newTaskTitle:string, todolistId:string) {
         return instance.post(`/${todolistId}/tasks`, {title: newTaskTitle});
     },
-    updateTask(task) {
+    updateTask(task:any) {
         return instance.put(`/${task.todoListId}/tasks/${task.id}`,  task);
     },
-    deleteTask(taskId, todolistId) {
+    deleteTask(taskId:string, todolistId:string) {
         return instance.delete(`/${todolistId}/tasks/${taskId}`)
     }
 };

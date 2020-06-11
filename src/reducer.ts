@@ -257,7 +257,8 @@ export const addTaskTC = (newText:string, todoListId:string) => (dispatch:Dispat
     });
 }
 
-export const changeTaskTC = (task, obj) => (dispatch:Dispatch<TodoActionType>, getState:()=>AppStateType) => {
+export const changeTaskTC = (task:any, obj:UpdateTaskType) => (dispatch:Dispatch<TodoActionType>, getState:()=>AppStateType) => {
+    debugger
     dispatch(setIsLoadAC(true))
     api.updateTask(task)
         .then(res => {
