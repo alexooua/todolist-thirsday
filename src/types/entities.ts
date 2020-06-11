@@ -3,6 +3,7 @@ export type TodoType = {
     title: string
     addedDate: string
     order: number
+    tasks: Array<TaskType>
 }
 export type TaskType = {
     description: string
@@ -17,3 +18,7 @@ export type TaskType = {
     order: number
     addedDate: string
 }
+export type UpdateTaskType = {
+    title: string
+    status: number
+};

@@ -1,16 +1,26 @@
 import React from 'react';
 import './App.css';
+import { ChangeEvent } from 'react';
+type StateType={
+    error:boolean
+    title:string
+}
+type OwnPropsType = {
+    // описываем пропсы, которые пришли из родительской компоненты
+    addItem(newText:string):void
+}
 
-class AddNewItemForm extends React.Component {
 
-    state = {
+class AddNewItemForm extends React.Component<OwnPropsType&StateType> {
+
+    state:StateType  = {
         error: false,
         title: ""
     };
 
     onAddItemClick = () => {
 
-        let newText = this.state.title;
+        let newText:string = this.state.title;
         this.setState({title: ""});
 
         if (newText === "") {
@@ -22,14 +32,14 @@ class AddNewItemForm extends React.Component {
         }
     };
 
-    onTitleChanged = (e) => {
+    onTitleChanged = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({
             error: false,
             title: e.currentTarget.value
         });
     };
 
-    onKeyPress = (e) => {
+    onKeyPress = (e:React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             this.onAddItemClick();
         }

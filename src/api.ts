@@ -1,4 +1,5 @@
 import axios from "axios";
+import {TodoType} from "./types/entities";
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1/todo-lists",
@@ -7,14 +8,20 @@ const instance = axios.create({
     // меняем API-KEY на собственный
     headers: {"API-KEY": "30e72227-8e6a-43bd-abeb-5f8819797dc9"}
 });
-
+type CreatResponseType={
+    resultCode:number
+    messages: Array<string>
+    data: {
+        item:TodoType
+    }
+}
 export const api = {
     getTodolists() {
         return instance.get("");
     },
-    createTodolist(title) {
+    createTodolist(title:string) {
 
-        return instance.post("", {title: title})
+        return instance.post<CreatResponseType>("", {title: title})
     },
     deleteTodolist(todolistId) {
         return instance.delete(`/${todolistId}` )
